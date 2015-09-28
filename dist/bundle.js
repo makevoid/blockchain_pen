@@ -784,7 +784,7 @@ if (name == null) name = nil;if (value == null) value = nil;
   Opal.dynamic_require_severity = "error";
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $module = Opal.module, $range = Opal.range, $hash2 = Opal.hash2, content = nil;
 
-  Opal.add_stubs(['$map', '$[]', '$to_s', '$instance_variables', '$to_proc', '$-', '$==', '$size', '$extend', '$include', '$get', '$utxo_callback', '$lambda', '$to_n', '$post', '$pushtx_callback', '$address', '$require', '$new', '$log', '$address_str', '$hashes_convert', '$each', '$push', '$empty?', '$pushtx', '$call', '$sign_and_broadcast', '$utxo', '$received_utxo', '$pvt_key', '$op_return', '$callback_write', '$attr_accessor', '$message', '$write', '$div', '$input', '$on', '$button', '$define_state', '$p', '$tx_id', '$present', '$q', '$render', '$create_element']);
+  Opal.add_stubs(['$map', '$[]', '$to_s', '$instance_variables', '$to_proc', '$-', '$==', '$size', '$extend', '$include', '$get', '$utxo_callback', '$lambda', '$to_n', '$post', '$pushtx_callback', '$address', '$require', '$new', '$log', '$address_str', '$hashes_convert', '$each', '$push', '$empty?', '$pushtx', '$call', '$sign_and_broadcast', '$utxo', '$received_utxo', '$pvt_key', '$op_return', '$callback_write', '$attr_accessor', '$define_state', '$message', '$write', '$chars=', '$>', '$chars', '$submit_disabled=', '$div', '$span', '$spacer', '$on', '$update_counter', '$input', '$button', '$submit_disabled', '$p', '$tx_id', '$present', '$q', '$render', '$create_element']);
   console.log("loading app environment");
   self.$require("browser");
   self.$require("browser/http");
@@ -1092,7 +1092,7 @@ if (tx_id == null) tx_id = nil;
     function $MessageForm(){};
     var self = $MessageForm = $klass($base, $super, 'MessageForm', $MessageForm);
 
-    var def = self.$$proto, $scope = self.$$scope;
+    var def = self.$$proto, $scope = self.$$scope, $a, $b, TMP_11, $c, TMP_12;
 
     self.$include((($scope.get('React')).$$scope.get('Component')));
 
@@ -1101,6 +1101,16 @@ if (tx_id == null) tx_id = nil;
     self.$extend($scope.get('UIHelpers'));
 
     self.$include($scope.get('UIHelpers'));
+
+    ($a = ($b = self).$define_state, $a.$$p = (TMP_11 = function(){var self = TMP_11.$$s || this;
+
+    return 0}, TMP_11.$$s = self, TMP_11), $a).call($b, "chars");
+
+    ($a = ($c = self).$define_state, $a.$$p = (TMP_12 = function(){var self = TMP_12.$$s || this;
+
+    return false}, TMP_12.$$s = self, TMP_12), $a).call($c, "submit_disabled");
+
+    Opal.cdecl($scope, 'MAX_CHARS', 75);
 
     def.$write = function() {
       var self = this;
@@ -1115,44 +1125,72 @@ if (tx_id == null) tx_id = nil;
       return document.querySelector("input[name=message]").value;
     };
 
-    return (def.$render = function() {
-      var $a, $b, TMP_11, self = this;
+    def.$update_counter = function() {
+      var $a, $b, self = this;
 
-      return ($a = ($b = self).$div, $a.$$p = (TMP_11 = function(){var self = TMP_11.$$s || this, $a, $b, TMP_12;
+      (($a = [$scope.get('String').$new(self.$message()).$size()]), $b = self, $b['$chars='].apply($b, $a), $a[$a.length-1]);
+      if (self.$chars()['$>']($scope.get('MAX_CHARS'))) {
+        return (($a = [true]), $b = self, $b['$submit_disabled='].apply($b, $a), $a[$a.length-1])
+        } else {
+        return nil
+      };
+    };
 
-      return ($a = ($b = self).$div, $a.$$p = (TMP_12 = function(){var self = TMP_12.$$s || this, $a, $b, TMP_13, $c, TMP_14;
+    def.$render = function() {
+      var $a, $b, TMP_13, self = this;
 
-        ($a = ($b = self).$div, $a.$$p = (TMP_13 = function(){var self = TMP_13.$$s || this;
+      return ($a = ($b = self).$div, $a.$$p = (TMP_13 = function(){var self = TMP_13.$$s || this, $a, $b, TMP_14, $c, TMP_17;
 
-          return self.$input($hash2(["name", "placeholder", "type"], {"name": "message", "placeholder": "your important message...", "type": "text"}))}, TMP_13.$$s = self, TMP_13), $a).call($b, $hash2(["className"], {"className": "five columns"}));
-          return ($a = ($c = self).$div, $a.$$p = (TMP_14 = function(){var self = TMP_14.$$s || this, $a, $b, TMP_15, $c, $d, TMP_16;
+      ($a = ($b = self).$div, $a.$$p = (TMP_14 = function(){var self = TMP_14.$$s || this, $a, $b, TMP_15, $c, TMP_16;
 
-          return ($a = ($b = ($c = ($d = self).$button, $c.$$p = (TMP_16 = function(){var self = TMP_16.$$s || this;
+        ($a = ($b = self).$span, $a.$$p = (TMP_15 = function(){var self = TMP_15.$$s || this;
 
-            return "Write"}, TMP_16.$$s = self, TMP_16), $c).call($d)).$on, $a.$$p = (TMP_15 = function(){var self = TMP_15.$$s || this;
+          return self.$chars()}, TMP_15.$$s = self, TMP_15), $a).call($b);
+          return ($a = ($c = self).$span, $a.$$p = (TMP_16 = function(){var self = TMP_16.$$s || this;
 
-            return self.$write()}, TMP_15.$$s = self, TMP_15), $a).call($b, "click")}, TMP_14.$$s = self, TMP_14), $a).call($c, $hash2(["className"], {"className": "one columns"}));}, TMP_12.$$s = self, TMP_12), $a).call($b, $hash2(["className"], {"className": "row"}))}, TMP_11.$$s = self, TMP_11), $a).call($b, $hash2(["className"], {"className": "message_input six columns"}));
-    }, nil) && 'render';
+          return " / " + ($scope.get('MAX_CHARS')) + " chars"}, TMP_16.$$s = self, TMP_16), $a).call($c);}, TMP_14.$$s = self, TMP_14), $a).call($b, $hash2(["className"], {"className": "row align-right"}));
+        self.$spacer();
+        return ($a = ($c = self).$div, $a.$$p = (TMP_17 = function(){var self = TMP_17.$$s || this, $a, $b, TMP_18, $c, TMP_20;
+
+        ($a = ($b = self).$div, $a.$$p = (TMP_18 = function(){var self = TMP_18.$$s || this, $a, $b, TMP_19;
+
+          return ($a = ($b = self.$input($hash2(["name", "placeholder", "type"], {"name": "message", "placeholder": "your important message...", "type": "text"}))).$on, $a.$$p = (TMP_19 = function(){var self = TMP_19.$$s || this;
+
+            return self.$update_counter()}, TMP_19.$$s = self, TMP_19), $a).call($b, "change")}, TMP_18.$$s = self, TMP_18), $a).call($b, $hash2(["className"], {"className": "five columns"}));
+          return ($a = ($c = self).$div, $a.$$p = (TMP_20 = function(){var self = TMP_20.$$s || this, $a, $b, TMP_21, $c, $d, TMP_22;
+
+          return ($a = ($b = ($c = ($d = self).$button, $c.$$p = (TMP_22 = function(){var self = TMP_22.$$s || this;
+
+            return "Write"}, TMP_22.$$s = self, TMP_22), $c).call($d, $hash2(["disabled"], {"disabled": self.$submit_disabled()}))).$on, $a.$$p = (TMP_21 = function(){var self = TMP_21.$$s || this;
+
+            return self.$write()}, TMP_21.$$s = self, TMP_21), $a).call($b, "click")}, TMP_20.$$s = self, TMP_20), $a).call($c, $hash2(["className"], {"className": "one columns"}));}, TMP_17.$$s = self, TMP_17), $a).call($c, $hash2(["className"], {"className": "row"}));}, TMP_13.$$s = self, TMP_13), $a).call($b, $hash2(["className"], {"className": "message_input six columns"}));
+    };
+
+    return (def.$spacer = function() {
+      var self = this;
+
+      return self.$div($hash2(["className"], {"className": "spacer10"}));
+    }, nil) && 'spacer';
   })(self, null);
   (function($base, $super) {
     function $Success(){};
     var self = $Success = $klass($base, $super, 'Success', $Success);
 
-    var def = self.$$proto, $scope = self.$$scope, $a, $b, TMP_17;
+    var def = self.$$proto, $scope = self.$$scope, $a, $b, TMP_23;
 
     self.$include((($scope.get('React')).$$scope.get('Component')));
 
-    ($a = ($b = self).$define_state, $a.$$p = (TMP_17 = function(){var self = TMP_17.$$s || this;
+    ($a = ($b = self).$define_state, $a.$$p = (TMP_23 = function(){var self = TMP_23.$$s || this;
 
-    return ""}, TMP_17.$$s = self, TMP_17), $a).call($b, "tx_id");
+    return ""}, TMP_23.$$s = self, TMP_23), $a).call($b, "tx_id");
 
     return (def.$render = function() {
-      var $a, $b, TMP_18, self = this;
+      var $a, $b, TMP_24, self = this;
 
-      return ($a = ($b = self).$div, $a.$$p = (TMP_18 = function(){var self = TMP_18.$$s || this;
+      return ($a = ($b = self).$div, $a.$$p = (TMP_24 = function(){var self = TMP_24.$$s || this;
 
       self.$p("Message written:");
-        return self.$p(self.$tx_id());}, TMP_18.$$s = self, TMP_18), $a).call($b, $hash2(["className"], {"className": "success"}));
+        return self.$p(self.$tx_id());}, TMP_24.$$s = self, TMP_24), $a).call($b, $hash2(["className"], {"className": "success"}));
     }, nil) && 'render';
   })(self, null);
   (function($base, $super) {
@@ -1164,11 +1202,11 @@ if (tx_id == null) tx_id = nil;
     self.$include((($scope.get('React')).$$scope.get('Component')));
 
     return (def.$render = function() {
-      var $a, $b, TMP_19, self = this;
+      var $a, $b, TMP_25, self = this;
 
-      return ($a = ($b = self).$div, $a.$$p = (TMP_19 = function(){var self = TMP_19.$$s || this;
+      return ($a = ($b = self).$div, $a.$$p = (TMP_25 = function(){var self = TMP_25.$$s || this;
 
-      return self.$present($scope.get('MessageForm'))}, TMP_19.$$s = self, TMP_19), $a).call($b, $hash2(["className"], {"className": "bc_stylus"}));
+      return self.$present($scope.get('MessageForm'))}, TMP_25.$$s = self, TMP_25), $a).call($b, $hash2(["className"], {"className": "bc_stylus"}));
     }, nil) && 'render';
   })(self, null);
   self.$extend($scope.get('UIHelpers'));

@@ -486,8 +486,14 @@ input[name=message] {
 input[type=submit], button {
   width: 100%; }
 
+.spacer10 {
+  height: 10px; }
+
 .spacer50 {
   height: 50px; }
 
 .spacer300 {
   height: 300px; }
+
+.align-right {
+  text-align: right; }

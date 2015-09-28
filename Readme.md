@@ -1,8 +1,15 @@
-# React.rb - Roda Websocket example
+# BlockchainStylus
 
-# mkv Opal setup (no sprockets, using guard)
+BlockchainStylus it's an UI and API for writing messages to the blockchain.
 
-A very fast opal setup - includes opal browser - uses guard to automatically compile your .js.ruby files as you save them - has opal and opal-browser vendored already in js files.
+It is built using Ruby Opal and Bitcore.js
+
+### Running it
+
+Install the dependencies:
+
+    bundle
+
 
 Open the project in a webserver:
 
@@ -21,17 +28,13 @@ then open a browser at:
 
 #### Development
 
-install the dependencies
-
-    bundle
-
 
 launch guard:
 
     guard
 
 
-modify app.rb, save and refresh the browser
+when you modify a ruby file the dist/bundle.js file will be transpiled
 
 
 ---
