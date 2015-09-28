@@ -1,0 +1,153 @@
+`console.log("loading app environment")`
+
+`self.$require("browser");`
+
+module RModel
+  def attributes
+    attrs = instance_variables.map{ |a| a.to_s[1..-1] }
+    (attrs - ["constructor", "toString"]).map(&:to_sym)
+  end
+end
+
+module TxFetcher
+
+  # blockchain.info api
+  #
+  # https://blockchain.info/api/api_websocket
+  #
+  WS_ENDPOINT = 'wss://ws.blockchain.info/inv'
+  #
+  # alternatives: https://chain.so/api#realtime-balance-updates
+
+  def load_transactions
+    tx_viz = self
+    Browser::Socket.new WS_ENDPOINT do
+      on :open do
+        puts '{ "event": "pusher:subscribe", "data": { "channel": "diff_order_book" } }'
+      end
+
+      on :message do |e|
+        data = `JSON.parse(e.native.data)`
+
+        if `data.event` == "data"
+
+          data  = `JSON.parse(data.data)`
+
+
+          bids = `data.bids`
+          asks = `data.asks`
+
+          bids = bids.map{ |price, volume| [price.to_f, volume.to_f] }.select{ |price, volume| volume > 0 }
+          asks = asks.map{ |price, volume| [price.to_f, volume.to_f] }.select{ |price, volume| volume > 0 }
+
+          # `console.log('bids', bids)`
+          # `console.log('asks', asks)`
+
+          tx_viz.bids = (tx_viz.bids + bids).sort_by{ |price, volume| -price } unless bids.empty?
+          tx_viz.asks = (tx_viz.asks + asks).sort_by{ |price, volume| price  } unless asks.empty?
+
+          # tx_viz.bids.push bids
+
+
+          # data  = `JSON.parse(e.native.data).x`
+          # out   = `data.out`
+          # hash  = `data.hash`
+          # value = out.map{ |o| `o.value` / 10 ** 8 }.inject :+
+          # value = value.round 8
+          # tx    = { value: value, hash: hash }
+          #
+          # comp_num = 100
+          # tx_gone = tx_viz.transactions[comp_num+1]
+          #
+          # if tx_gone
+          #   # TODO: look at ref
+          #   reactid = ".0.3.$#{tx_gone[:hash]}"
+          #   # React.findDOMNode
+          #   elem_gone = `document.querySelector("div[data-reactid='"+reactid+"']")`
+          #   `React.unmountComponentAtNode(elem_gone)`
+          # end
+          # # tx_viz.transactions.push tx
+          # tx_viz.transactions = [tx] + tx_viz.transactions[0..comp_num]
+          # tx_viz.total_value  = tx_viz.total_value + value
+        end
+      end
+    end
+  end
+end
+
+class Transaction
+  include React::Component
+
+  def render
+    width = params[:volume].round 1
+    width = "#{width}%"
+    `
+      var divStyle = {
+        width: width
+      }
+    `
+    div style: `divStyle` do
+      "#{params[:price]} USD - #{params[:volume]} BTC"
+    end
+  end
+end
+
+class TxViz
+  include React::Component
+  include TxFetcher
+  after_mount :load_transactions
+  after_mount :reset_timer
+
+  define_state(:timer) { `new Date()` }
+  define_state(:transactions)  { [] }
+
+  def reset_timer
+    self.timer = `new Date()`
+  end
+
+  def render
+    div do
+      div className: "header" do
+        h3 { "Ƀ keychain" }
+        p className: "mini" do
+          "Opal Bitcore wallet example"
+        end
+      end
+      # div className: "right_panel" do
+      #   div className: "theme colors" do
+      #     p { "theme colors" }
+      #     p { "[  ] light" }
+      #     p { "[ x ] color" }
+      #     p { "[  ] dark" }
+      #     p { "[  ] desaturated" }
+      #     p { "[  ] invert" }
+      #   end
+      # end
+      div className: "tx_list row" do
+        section className: "bids three columns" do
+          h3 { "Balance" }
+
+        end
+        section className: "asks three columns" do
+          h3 { "Transactions" }
+          self.transactions.each_with_index.map do |trade, idx|
+            price, volume = trade
+            comp = present Transaction, price: price, volume: volume, key: "ask-#{idx}"
+            comp
+          end
+        end
+      end
+    end
+  end
+end
+
+`console.log("loading app.rb")`
+
+content = `document.querySelector('.content')`
+
+React.render(
+  React.create_element(TxViz),
+  # $document.body.to_n
+  # $document.querySelector ".content"
+  `content`
+)
