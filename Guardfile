@@ -2,10 +2,18 @@
 
 CONCAT_FILES = %w(
   config/env
+  lib/modules/http
   lib/modules/rmodel
-  lib/modules/tx_fetcher
-  lib/comp/transaction
-  lib/comp/tx_viz
+  lib/modules/debug_helpers
+  lib/modules/ui_helpers
+  lib/models/blockchain
+  lib/models/private_key
+  lib/models/bit_core
+  lib/models/stylus
+  lib/models/wallet
+  lib/comp/message_form
+  lib/comp/success
+  lib/comp/bc_stylus
   app
 )
 

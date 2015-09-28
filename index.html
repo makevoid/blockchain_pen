@@ -2,22 +2,34 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Bitstamp Transactions (Ƀ, websockets)</title>
-    <meta name="description" content="Bitstamp Transactions">
+    <title>Blockchain Stylus</title>
+    <meta name="description" content="Blockchain Stylus - write your permantent message, prove that that document existed at that point in time">
     <meta name="author" content="Francesco 'makevoid' Canessa">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'> -->
     <link rel="stylesheet" href="./css/vendor/normalize.css" media="screen" charset="utf-8">
-    <link rel="stylesheet" href="./css/vendor/skeleton.css" media="screen" charset="utf-8">
     <link rel="stylesheet" href="./css/style.css" media="screen" charset="utf-8">
     <!-- <link rel="icon" type="image/png" href="images/favicon.png" /> -->
   </head>
   <body>
     <div class="container">
       <div class="row">
+        <header>
+          <div class="row">
+            <div class="one columns">
+              <img src="/img/stylus.svg">
+            </div>
+            <div class="five columns">
+              <h1>Blockchain Stylus</h1>
+            </div>
+          </div>
+        </header>
+        <div class="spacer50"></div>
         <div class="content column">
           <!-- react app will be mounted here -->
         </div>
+        <div class="spacer300"></div>
+        <footer>address: 1PzTDHe2GKjv2sHHKoN4Gbu2njLtekkYHh</footer>
       </div>
     </div>
     <script type="text/javascript" src="./vendor/opal.js"></script>
@@ -25,9 +37,11 @@
     <script type="text/javascript" src="./vendor/opal-browser.js"></script>
     <script type="text/javascript" src="./vendor/opal-browser-support.js"></script>
     <script type="text/javascript" src="./vendor/opal-browser-event.js"></script>
-    <script type="text/javascript" src="./vendor/opal-browser-socket.js"></script>
+    <script type="text/javascript" src="./vendor/opal-browser-http.js"></script>
     <script type="text/javascript" src="./vendor/react.js"></script>
     <script type="text/javascript" src="./vendor/react-rb.js"></script>
+    <script type="text/javascript" src="./vendor/zepto.js"></script>
+    <script type="text/javascript" src="./vendor/bitcore.js"></script>
     <script type="text/javascript" src="./dist/bundle.js"></script>
   </body>
 </html>

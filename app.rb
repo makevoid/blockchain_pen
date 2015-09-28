@@ -1,14 +1,12 @@
-`console.log("loading app.rb")`
+extend UIHelpers
 
-content = `document.querySelector('.content')`
+log "loading app.rb"
 
-`content.innerHTML = 'asd'`
-
-`console.log(content.innerHTML)`
+content = q ".content"
 
 React.render(
-  React.create_element(TxViz),
-  # $document.body.to_n
-  # $document.querySelector ".content"
+  React.create_element(BCStylus),
   `content`
 )
+
+Stylus.write "antani come se fosse"

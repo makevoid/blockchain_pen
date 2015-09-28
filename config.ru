@@ -1,3 +1,3 @@
-require_relative 'try_roda_ws.rb'
+require_relative 'bc_stylus.rb'
 
-run App.freeze.app
+run BCStylus.freeze.app

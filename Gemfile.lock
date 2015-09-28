@@ -1,30 +1,9 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    addressable (2.3.8)
     coderay (1.1.0)
-    cookiejar (0.3.2)
     daemons (1.2.3)
-    em-http-request (1.1.2)
-      addressable (>= 2.3.4)
-      cookiejar
-      em-socksify (>= 0.3)
-      eventmachine (>= 1.0.3)
-      http_parser.rb (>= 0.6.0)
-    em-socksify (0.3.0)
-      eventmachine (>= 1.0.0.beta.4)
     eventmachine (1.0.8)
-    faye (1.1.2)
-      cookiejar (>= 0.3.0)
-      em-http-request (>= 0.3.0)
-      eventmachine (>= 0.12.0)
-      faye-websocket (>= 0.9.1)
-      multi_json (>= 1.0.0)
-      rack (>= 1.0.0)
-      websocket-driver (>= 0.5.1)
-    faye-websocket (0.10.0)
-      eventmachine (>= 0.12.0)
-      websocket-driver (>= 0.5.1)
     ffi (1.9.10)
     formatador (0.2.5)
     guard (2.13.0)
@@ -46,7 +25,6 @@ GEM
       guard (>= 2.0.0)
       guard-compat (~> 1.0)
     hike (1.2.3)
-    http_parser.rb (0.6.0)
     listen (3.0.3)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
@@ -88,15 +66,11 @@ GEM
       rack (~> 1.0)
     thor (0.19.1)
     tilt (1.4.1)
-    websocket-driver (0.6.2)
-      websocket-extensions (>= 0.1.0)
-    websocket-extensions (0.1.2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  faye
   guard-concat
   guard-sass
   guard-shell
