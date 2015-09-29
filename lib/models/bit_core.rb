@@ -90,7 +90,8 @@ class BitCore
       log "received tx_id:", tx_id
       log "TX pushed!!!"
       log "https://live.blockcypher.com/btc/tx/#{tx_id}"
-      log "https://chain.so/tx/BTC/#{tx_id}"
+      # log "https://chain.so/tx/BTC/#{tx_wid}"
+      log "https://blockchain.info/tx/#{tx_id}"
     end
   end
 
