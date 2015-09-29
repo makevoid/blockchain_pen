@@ -130,6 +130,7 @@ class PrivateKey
 end
 
 require 'native'
+require 'json'
 
 class BitCore
   include DebugHelpers
@@ -145,8 +146,9 @@ class BitCore
   end
 
   def sign_and_broadcast
-    -> (message, utxos) do
+    -> (message, utxos, callback) do
       log "sign and broadcast"
+      tx_amount = 1000
 
       utxos = hashes_convert utxos
 
@@ -162,14 +164,21 @@ class BitCore
         total_amount_sathoshis += amount_satoshis
         amount_btc = `new bitcore.Unit.fromSatoshis(amount_satoshis).BTC`
         log amount_btc
+        tx_id = utxo["tx_hash_big_endian"]
+
+        if store.utxos && JSON.parse(store.utxos).include?(tx_id)
+          log "skipping transaction: #{tx_id}"
+          next
+        end
+
         utxos_out.push({
           address:      @address,
-          txId:         utxo["tx_hash_big_endian"],
+          txId:         tx_id,
           scriptPubKey: utxo["script"],
           amount:       amount_btc,
           vout:         utxo["tx_output_n"],
         })
-        break if amount_satoshis > TX_FEE
+        break if amount_satoshis > TX_FEE+tx_amount
       end
       log "utxos_out:",  utxos_out.size
 
@@ -177,9 +186,9 @@ class BitCore
         fee = TX_FEE # from 5000 it should be a good fee
         utxos_out = utxos_out.to_n
         address = @address
-        amount  = 1000
+        amount  = tx_amount
         pvt_key = @pvt_key_string
-        # message # the most important
+        log "utxos_out: ", utxos_out
 
         transaction = `new bitcore.Transaction()
           .from(utxos_out)
@@ -193,8 +202,10 @@ class BitCore
         tx_hash = `transaction.serialize()`
         log tx_hash
 
-        Blockchain.pushtx tx_hash, self.pushtx_callback
+        Blockchain.pushtx tx_hash, self.pushtx_callback(utxos_out, callback)
 
+        # TODO:
+        #
         # try {
         #
         #   txHash = transaction.serialize();
@@ -204,7 +215,6 @@ class BitCore
         #     'message': 'Error serializing the transaction: ' + error.message
         #   });
         # }
-
       else
         log "ERROR: Not enough UTXOs"
       end
@@ -214,41 +224,35 @@ class BitCore
     end
   end
 
-  def pushtx_callback
+  def pushtx_callback(utxos_out, callback)
     -> (tx_id) do
+      log "save in localStorage", tx_id
+      log "utxos_out: ", utxos_out
+
+      utxos = store.utxos ? JSON.parse(store.utxos) : []
+      utxos = utxos + utxos_out.map{ |utxo| `utxo.txId` }
+      store.utxos = utxos.to_json
+
       log "received tx_id:", tx_id
       log "TX pushed!!!"
-      log "https://live.blockcypher.com/btc/tx/#{tx_id}"
-      log "https://chain.so/tx/BTC/#{tx_id}"
+
+      callback.(tx_id)
     end
   end
 
-  def received_utxo(message)
+  def received_utxo(message, callback)
     -> (utxo) do
       log "received UTXO:", utxo
-      self.sign_and_broadcast.(message, utxo)
+      self.sign_and_broadcast.(message, utxo, callback)
     end
   end
 
   def op_return(message, callback)
-    Blockchain.utxo @address, self.received_utxo(message)
+    Blockchain.utxo @address, self.received_utxo(message, callback)
+  end
 
-
-    # var privateKey = ;
-    # var utxo = {
-    #   "txId" : "115e8f72f39fad874cfab0deed11a80f24f967a84079fb56ddf53ea02e308986",
-    #   "outputIndex" : 0,
-    #   "address" : "
-    # 17XBj6iFEsf8kzDMGQk5ghZipxX49VXuaV
-    # ",
-    #   "script" : "76a91447862fe165e6121af80d5dde1ecb478ed170565b88ac",
-    #   "satoshis" : 50000
-    # };
-    #
-    # var transaction = new bitcore.Transaction()
-    #     .from(utxo)
-    #     .addData('antani')
-    #     .sign(privateKey);
+  def store
+    Native(`localStorage`)
   end
 
   # TODO: use require 'json'; JSON.parse; zepto get
@@ -268,15 +272,18 @@ class Pen
     "L1dkBEcCKUdbn5xgmgmeJWJYE6jWb1UmiwQJjet2ZuQPrYLHoKKM" # 1PzTDHe2GKjv2sHHKoN4Gbu2njLtekkYHh
   end
 
-  def self.write(message)
+  def self.write(message, callback)
     log "stylus - preparing to write: #{message}"
     bitcore = BitCore.new(pvt_key)
-    bitcore.op_return message, self.callback_write
+    bitcore.op_return message, self.callback_write(callback)
   end
 
-  def self.callback_write
+  def self.callback_write(callback)
     -> (tx_id) do
       log 'stylus - wrote message! tx_id:', tx_id
+      log "https://live.blockcypher.com/btc/tx/#{tx_id}"
+      log "https://blockchain.info/tx/#{tx_id}"
+      callback.(tx_id)
     end
   end
 
@@ -339,12 +346,13 @@ class MessageForm
 
   define_state(:chars)  { 0 }
   define_state(:submit_disabled)  { false }
+  define_state(:tx_id)  { nil }
 
   MAX_CHARS = 75
 
   def write
     log "writing message: #{self.message}"
-    Pen.write self.message
+    Pen.write self.message, self.callback_write
   end
 
   def message
@@ -379,6 +387,28 @@ class MessageForm
           end.on(:click){ write }
         end
       end
+      if self.tx_id
+        div className: "row" do
+          div className: "spacer30"
+          div { "the message has been written: #{self.tx_id}" }
+          div do
+            a href: "https://live.blockcypher.com/btc/tx/#{self.tx_id}" do
+              "live.blockcypher.com/btc/tx/#{self.tx_id}"
+            end
+          end
+          div do
+            a href: "https://blockchain.info/tx/#{self.tx_id}" do
+              "blockchain.info/tx/#{self.tx_id}"
+            end
+          end
+        end
+      end
+    end
+  end
+
+  def callback_write
+    -> (tx_id) do
+      self.tx_id = tx_id
     end
   end
 

@@ -9,7 +9,7 @@ CONCAT_FILES = %w(
   lib/models/blockchain
   lib/models/private_key
   lib/models/bit_core
-  lib/models/stylus
+  lib/models/pen
   lib/models/wallet
   lib/models/hasher
   lib/comp/message_form

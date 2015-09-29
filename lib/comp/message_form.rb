@@ -6,12 +6,13 @@ class MessageForm
 
   define_state(:chars)  { 0 }
   define_state(:submit_disabled)  { false }
+  define_state(:tx_id)  { nil }
 
   MAX_CHARS = 75
 
   def write
     log "writing message: #{self.message}"
-    Pen.write self.message
+    Pen.write self.message, self.callback_write
   end
 
   def message
@@ -46,6 +47,28 @@ class MessageForm
           end.on(:click){ write }
         end
       end
+      if self.tx_id
+        div className: "row" do
+          div className: "spacer30"
+          div { "the message has been written: #{self.tx_id}" }
+          div do
+            a href: "https://live.blockcypher.com/btc/tx/#{self.tx_id}" do
+              "live.blockcypher.com/btc/tx/#{self.tx_id}"
+            end
+          end
+          div do
+            a href: "https://blockchain.info/tx/#{self.tx_id}" do
+              "blockchain.info/tx/#{self.tx_id}"
+            end
+          end
+        end
+      end
+    end
+  end
+
+  def callback_write
+    -> (tx_id) do
+      self.tx_id = tx_id
     end
   end
 
