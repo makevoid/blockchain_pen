@@ -57,13 +57,16 @@ class MessageForm
           div className: "spacer30"
           div { "the message has been written: #{self.tx_id}" }
           div do
-            a href: "https://live.blockcypher.com/btc/tx/#{self.tx_id}" do
-              "live.blockcypher.com/btc/tx/#{self.tx_id}"
+            span do
+              a href: "https://live.blockcypher.com/btc/tx/#{self.tx_id}" do
+                "blockcypher.com"
+              end
             end
-          end
-          div do
-            a href: "https://blockchain.info/tx/#{self.tx_id}" do
-              "blockchain.info/tx/#{self.tx_id}"
+            span { "-" }
+            span do
+              a href: "https://blockchain.info/tx/#{self.tx_id}" do
+                "blockchain.info"
+              end
             end
           end
         end
