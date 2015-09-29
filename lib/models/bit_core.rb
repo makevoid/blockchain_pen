@@ -63,7 +63,9 @@ class BitCore
         log tx_hash
 
         Blockchain.pushtx tx_hash, self.pushtx_callback
-
+        
+        # TODO:
+        #
         # try {
         #
         #   txHash = transaction.serialize();
