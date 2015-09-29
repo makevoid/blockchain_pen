@@ -5,6 +5,6 @@ log "loading app.rb"
 content = q ".content"
 
 React.render(
-  React.create_element(BCStylus),
+  React.create_element(BCPen),
   `content`
 )

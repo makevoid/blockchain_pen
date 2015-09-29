@@ -1,4 +1,4 @@
-class Stylus
+class Pen
   extend DebugHelpers
 
   def self.pvt_key

@@ -2,7 +2,7 @@ require_relative "config/env_server"
 
 require 'net/http'
 
-class BCStylus < Roda
+class BCPen < Roda
 
   plugin :static, %w( /dist /vendor /css /img ), root: APP_PATH
 

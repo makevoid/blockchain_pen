@@ -3,6 +3,8 @@ require 'native'
 class BitCore
   include DebugHelpers
 
+  TX_FEE = 8000
+
   def initialize(pvt_key_string)
     @pvt_key_string = pvt_key_string
     @pvt_key = PrivateKey.new pvt_key_string
@@ -19,9 +21,14 @@ class BitCore
 
       log "utxo_size", utxos.size
       utxos_out = []
+      total_amount_sathoshis = 0
+
+      # TODO: save utxo used in local storage if the transaction succeeded in cache for 2 minutes
+      # lock utxo and don't reuse it
 
       utxos.each do |utxo|
         amount_satoshis = utxo["value"]
+        total_amount_sathoshis += amount_satoshis
         amount_btc = `new bitcore.Unit.fromSatoshis(amount_satoshis).BTC`
         log amount_btc
         utxos_out.push({
@@ -31,13 +38,15 @@ class BitCore
           amount:       amount_btc,
           vout:         utxo["tx_output_n"],
         })
+        break if amount_satoshis > TX_FEE
       end
+      log "utxos_out:",  utxos_out.size
 
       unless utxos.empty?
-        fee = 8000 # from 5000 it should be a good fee
+        fee = TX_FEE # from 5000 it should be a good fee
         utxos_out = utxos_out.to_n
         address = @address
-        amount = 1000 # ??? recheck
+        amount  = 1000
         pvt_key = @pvt_key_string
         # message # the most important
 

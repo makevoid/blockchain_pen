@@ -784,7 +784,7 @@ if (name == null) name = nil;if (value == null) value = nil;
   Opal.dynamic_require_severity = "error";
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $module = Opal.module, $range = Opal.range, $hash2 = Opal.hash2, content = nil;
 
-  Opal.add_stubs(['$map', '$[]', '$to_s', '$instance_variables', '$to_proc', '$-', '$==', '$size', '$extend', '$include', '$get', '$utxo_callback', '$lambda', '$to_n', '$post', '$pushtx_callback', '$address', '$require', '$new', '$log', '$address_str', '$hashes_convert', '$each', '$push', '$empty?', '$pushtx', '$call', '$sign_and_broadcast', '$utxo', '$received_utxo', '$pvt_key', '$op_return', '$callback_write', '$attr_accessor', '$define_state', '$message', '$write', '$chars=', '$>', '$chars', '$submit_disabled=', '$div', '$span', '$spacer', '$on', '$update_counter', '$input', '$button', '$submit_disabled', '$hash', '$hash_file', '$p', '$tx_id', '$present', '$q', '$render', '$create_element']);
+  Opal.add_stubs(['$map', '$[]', '$to_s', '$instance_variables', '$to_proc', '$-', '$==', '$size', '$extend', '$include', '$get', '$utxo_callback', '$lambda', '$to_n', '$post', '$pushtx_callback', '$address', '$require', '$new', '$log', '$address_str', '$hashes_convert', '$each', '$+', '$push', '$>', '$empty?', '$pushtx', '$call', '$sign_and_broadcast', '$utxo', '$received_utxo', '$pvt_key', '$op_return', '$callback_write', '$attr_accessor', '$define_state', '$message', '$write', '$chars=', '$chars', '$submit_disabled=', '$div', '$span', '$spacer', '$on', '$update_counter', '$input', '$button', '$submit_disabled', '$hash', '$hash_file', '$p', '$tx_id', '$present', '$q', '$render', '$create_element']);
   console.log("loading app environment");
   self.$require("browser");
   self.$require("browser/http");
@@ -957,6 +957,8 @@ if (tx_info == null) tx_info = nil;
     def.pvt_key = def.address = nil;
     self.$include($scope.get('DebugHelpers'));
 
+    Opal.cdecl($scope, 'TX_FEE', 8000);
+
     def.$initialize = function(pvt_key_string) {
       var self = this;
 
@@ -970,7 +972,7 @@ if (tx_info == null) tx_info = nil;
     def.$sign_and_broadcast = function() {
       var $a, $b, TMP_4, self = this;
 
-      return ($a = ($b = self).$lambda, $a.$$p = (TMP_4 = function(message, utxos){var self = TMP_4.$$s || this, $a, $b, TMP_5, utxos_out = nil, fee = nil, address = nil, amount = nil, pvt_key = nil, transaction = nil, tx_hash = nil;
+      return ($a = ($b = self).$lambda, $a.$$p = (TMP_4 = function(message, utxos){var self = TMP_4.$$s || this, $a, $b, TMP_5, utxos_out = nil, total_amount_sathoshis = nil, fee = nil, address = nil, amount = nil, pvt_key = nil, transaction = nil, tx_hash = nil;
         if (self.address == null) self.address = nil;
         if (self.pvt_key_string == null) self.pvt_key_string = nil;
 if (message == null) message = nil;if (utxos == null) utxos = nil;
@@ -978,17 +980,25 @@ if (message == null) message = nil;if (utxos == null) utxos = nil;
         utxos = self.$hashes_convert(utxos);
         self.$log("utxo_size", utxos.$size());
         utxos_out = [];
+        total_amount_sathoshis = 0;
         ($a = ($b = utxos).$each, $a.$$p = (TMP_5 = function(utxo){var self = TMP_5.$$s || this, amount_satoshis = nil, amount_btc = nil;
           if (self.address == null) self.address = nil;
 if (utxo == null) utxo = nil;
         amount_satoshis = utxo['$[]']("value");
+          total_amount_sathoshis = total_amount_sathoshis['$+'](amount_satoshis);
           amount_btc = new bitcore.Unit.fromSatoshis(amount_satoshis).BTC;
           self.$log(amount_btc);
-          return utxos_out.$push($hash2(["address", "txId", "scriptPubKey", "amount", "vout"], {"address": self.address, "txId": utxo['$[]']("tx_hash_big_endian"), "scriptPubKey": utxo['$[]']("script"), "amount": amount_btc, "vout": utxo['$[]']("tx_output_n")}));}, TMP_5.$$s = self, TMP_5), $a).call($b);
+          utxos_out.$push($hash2(["address", "txId", "scriptPubKey", "amount", "vout"], {"address": self.address, "txId": utxo['$[]']("tx_hash_big_endian"), "scriptPubKey": utxo['$[]']("script"), "amount": amount_btc, "vout": utxo['$[]']("tx_output_n")}));
+          if (amount_satoshis['$>']($scope.get('TX_FEE'))) {
+            return ($breaker.$v = nil, $breaker)
+            } else {
+            return nil
+          };}, TMP_5.$$s = self, TMP_5), $a).call($b);
+        self.$log("utxos_out:", utxos_out.$size());
         if ((($a = utxos['$empty?']()) !== nil && (!$a.$$is_boolean || $a == true))) {
           self.$log("ERROR: Not enough UTXOs")
           } else {
-          fee = 8000;
+          fee = $scope.get('TX_FEE');
           utxos_out = utxos_out.$to_n();
           address = self.address;
           amount = 1000;
@@ -1042,8 +1052,8 @@ if (elem == null) elem = nil;
     }, nil) && 'hashes_convert';
   })(self, null);
   (function($base, $super) {
-    function $Stylus(){};
-    var self = $Stylus = $klass($base, $super, 'Stylus', $Stylus);
+    function $Pen(){};
+    var self = $Pen = $klass($base, $super, 'Pen', $Pen);
 
     var def = self.$$proto, $scope = self.$$scope;
 
@@ -1169,7 +1179,7 @@ if (tx_id == null) tx_id = nil;
       var self = this;
 
       self.$log("writing message: " + (self.$message()));
-      return $scope.get('Stylus').$write(self.$message());
+      return $scope.get('Pen').$write(self.$message());
     };
 
     def.$message = function() {
@@ -1287,8 +1297,8 @@ if (tx_id == null) tx_id = nil;
     }, nil) && 'render';
   })(self, null);
   (function($base, $super) {
-    function $BCStylus(){};
-    var self = $BCStylus = $klass($base, $super, 'BCStylus', $BCStylus);
+    function $BCPen(){};
+    var self = $BCPen = $klass($base, $super, 'BCPen', $BCPen);
 
     var def = self.$$proto, $scope = self.$$scope;
 
@@ -1305,5 +1315,5 @@ if (tx_id == null) tx_id = nil;
   self.$extend($scope.get('UIHelpers'));
   self.$log("loading app.rb");
   content = self.$q(".content");
-  return $scope.get('React').$render($scope.get('React').$create_element($scope.get('BCStylus')), content);
+  return $scope.get('React').$render($scope.get('React').$create_element($scope.get('BCPen')), content);
 })(Opal);

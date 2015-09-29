@@ -51,4 +51,4 @@ you can also run everything with a simple command (experimental)
 - opal-browser (use websocket easily)
 - react.rb (js dom diffing + cool ruby API to define views + state models)
 
-the old name was BlockchainStylus, all the files in the repo named blockchain_stylus or bc_stylus are main files :)
+the old name was BlockchainPen, all the files in the repo named blockchain_stylus or bc_stylus are main files :)

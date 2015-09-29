@@ -1,4 +1,4 @@
-class BCStylus
+class BCPen
   include React::Component
 
   def render

@@ -11,7 +11,7 @@ class MessageForm
 
   def write
     log "writing message: #{self.message}"
-    Stylus.write self.message
+    Pen.write self.message
   end
 
   def message
