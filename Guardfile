@@ -11,7 +11,9 @@ CONCAT_FILES = %w(
   lib/models/bit_core
   lib/models/stylus
   lib/models/wallet
+  lib/models/hasher
   lib/comp/message_form
+  lib/comp/file_form
   lib/comp/success
   lib/comp/bc_stylus
   app

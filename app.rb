@@ -8,5 +8,3 @@ React.render(
   React.create_element(BCStylus),
   `content`
 )
-
-Stylus.write "antani come se fosse"

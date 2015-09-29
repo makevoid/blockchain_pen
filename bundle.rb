@@ -15,11 +15,39 @@ class HTTP
 
   def self.post(url, params, callback)
     # console.log
-    url = "/test"
-    `$.post(url, params, function(data){
+    # url = "/test"
+    `var success = function(data){
       console.log("POST", url)
       callback(data)
-    })`
+    }`
+
+
+    `var data = {
+      tx: params.tx
+    }
+
+
+    console.log(JSON.stringify(data))
+    `
+
+
+    `ajax = {
+      contentType: 'application/json',
+      data: JSON.stringify(data),
+      dataType: 'json',
+      processData: false,
+      type: 'POST',
+      success: success,
+      url: url
+    }`
+
+
+    `$.ajax(ajax)`
+
+    # `$.ajax(url, ajax, function(data){
+    #   console.log("POST", url)
+    #   callback(data)
+    # })`
   end
 end
 
@@ -262,6 +290,38 @@ end
 # test
 # w = Wallet::TEST.(); puts w.attributes
 
+class Hasher
+
+  def self.hash_file
+
+  end
+
+  def self.hash(file)
+
+   `
+
+    reader = new FileReader();
+    reader.onload = function(data) {
+      window.crypto.subtle.digest(
+        {
+            name: "SHA-256",
+        },
+        data
+      )
+      .then(function(hash){
+        console.log(new Uint8Array(hash))
+      })
+      .catch(function(err){
+          console.error(err)
+      })
+    }
+    reader.readAsArrayBuffer(file)
+
+    `
+  end
+
+end
+
 class MessageForm
   include React::Component
   extend DebugHelpers
@@ -289,7 +349,7 @@ class MessageForm
   end
 
   def render
-    div className: "message_input six columns" do
+    div className: "message_input" do
       div className: "row align-right" do
         span do
           self.chars
@@ -318,6 +378,33 @@ class MessageForm
   end
 end
 
+class FileForm
+  include React::Component
+  extend DebugHelpers
+
+  define_state(:submit_disabled)  { false }
+
+  def hash_file
+   Hasher.hash `document.querySelector("input[name=file]").files[0]`
+   `console.log("hash file called!!!")`
+  end
+
+  def render
+    div className: "message_input" do
+      div className: "row" do
+        div className: "five columns" do
+          input name: "file", type: "file"
+        end
+        div className: "one columns" do
+          button(disabled: self.submit_disabled) do
+            "Write hash"
+          end.on(:click){ hash_file }
+        end
+      end
+    end
+  end
+end
+
 class Success
   include React::Component
 
@@ -337,6 +424,7 @@ class BCStylus
   def render
     div className: "bc_stylus" do
       present MessageForm
+      present FileForm
     end
   end
 end
@@ -351,5 +439,3 @@ React.render(
   React.create_element(BCStylus),
   `content`
 )
-
-Stylus.write "antani come se fosse"

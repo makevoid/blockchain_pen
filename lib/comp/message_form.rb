@@ -25,7 +25,7 @@ class MessageForm
   end
 
   def render
-    div className: "message_input six columns" do
+    div className: "message_input" do
       div className: "row align-right" do
         span do
           self.chars

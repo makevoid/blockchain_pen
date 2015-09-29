@@ -784,7 +784,7 @@ if (name == null) name = nil;if (value == null) value = nil;
   Opal.dynamic_require_severity = "error";
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $module = Opal.module, $range = Opal.range, $hash2 = Opal.hash2, content = nil;
 
-  Opal.add_stubs(['$map', '$[]', '$to_s', '$instance_variables', '$to_proc', '$-', '$==', '$size', '$extend', '$include', '$get', '$utxo_callback', '$lambda', '$to_n', '$post', '$pushtx_callback', '$address', '$require', '$new', '$log', '$address_str', '$hashes_convert', '$each', '$push', '$empty?', '$pushtx', '$call', '$sign_and_broadcast', '$utxo', '$received_utxo', '$pvt_key', '$op_return', '$callback_write', '$attr_accessor', '$define_state', '$message', '$write', '$chars=', '$>', '$chars', '$submit_disabled=', '$div', '$span', '$spacer', '$on', '$update_counter', '$input', '$button', '$submit_disabled', '$p', '$tx_id', '$present', '$q', '$render', '$create_element']);
+  Opal.add_stubs(['$map', '$[]', '$to_s', '$instance_variables', '$to_proc', '$-', '$==', '$size', '$extend', '$include', '$get', '$utxo_callback', '$lambda', '$to_n', '$post', '$pushtx_callback', '$address', '$require', '$new', '$log', '$address_str', '$hashes_convert', '$each', '$push', '$empty?', '$pushtx', '$call', '$sign_and_broadcast', '$utxo', '$received_utxo', '$pvt_key', '$op_return', '$callback_write', '$attr_accessor', '$define_state', '$message', '$write', '$chars=', '$>', '$chars', '$submit_disabled=', '$div', '$span', '$spacer', '$on', '$update_counter', '$input', '$button', '$submit_disabled', '$hash', '$hash_file', '$p', '$tx_id', '$present', '$q', '$render', '$create_element']);
   console.log("loading app environment");
   self.$require("browser");
   self.$require("browser/http");
@@ -807,11 +807,27 @@ if (name == null) name = nil;if (value == null) value = nil;
     return (Opal.defs(self, '$post', function(url, params, callback) {
       var self = this;
 
-      url = "/test";
-      return $.post(url, params, function(data){
+      var success = function(data){
       console.log("POST", url)
       callback(data)
-    });
+    };
+      var data = {
+      tx: params.tx
+    }
+
+
+    console.log(JSON.stringify(data))
+    ;
+      ajax = {
+      contentType: 'application/json',
+      data: JSON.stringify(data),
+      dataType: 'json',
+      processData: false,
+      type: 'POST',
+      success: success,
+      url: url
+    };
+      return $.ajax(ajax);
     }), nil) && 'post';
   })(self, null);
   (function($base) {
@@ -1089,6 +1105,43 @@ if (tx_id == null) tx_id = nil;
     return $scope.get('Wallet').$new($hash2(["address", "balance"], {"address": "1asd", "balance": 10000}))}, TMP_10.$$s = self, TMP_10), $a).call($b));
   })(self, null);
   (function($base, $super) {
+    function $Hasher(){};
+    var self = $Hasher = $klass($base, $super, 'Hasher', $Hasher);
+
+    var def = self.$$proto, $scope = self.$$scope;
+
+    Opal.defs(self, '$hash_file', function() {
+      var self = this;
+
+      return nil;
+    });
+
+    return (Opal.defs(self, '$hash', function(file) {
+      var self = this;
+
+      
+
+    reader = new FileReader();
+    reader.onload = function(data) {
+      window.crypto.subtle.digest(
+        {
+            name: "SHA-256",
+        },
+        data
+      )
+      .then(function(hash){
+        console.log(new Uint8Array(hash))
+      })
+      .catch(function(err){
+          console.error(err)
+      })
+    }
+    reader.readAsArrayBuffer(file)
+
+    
+    }), nil) && 'hash';
+  })(self, null);
+  (function($base, $super) {
     function $MessageForm(){};
     var self = $MessageForm = $klass($base, $super, 'MessageForm', $MessageForm);
 
@@ -1163,7 +1216,7 @@ if (tx_id == null) tx_id = nil;
 
             return "Write"}, TMP_22.$$s = self, TMP_22), $c).call($d, $hash2(["disabled"], {"disabled": self.$submit_disabled()}))).$on, $a.$$p = (TMP_21 = function(){var self = TMP_21.$$s || this;
 
-            return self.$write()}, TMP_21.$$s = self, TMP_21), $a).call($b, "click")}, TMP_20.$$s = self, TMP_20), $a).call($c, $hash2(["className"], {"className": "one columns"}));}, TMP_17.$$s = self, TMP_17), $a).call($c, $hash2(["className"], {"className": "row"}));}, TMP_13.$$s = self, TMP_13), $a).call($b, $hash2(["className"], {"className": "message_input six columns"}));
+            return self.$write()}, TMP_21.$$s = self, TMP_21), $a).call($b, "click")}, TMP_20.$$s = self, TMP_20), $a).call($c, $hash2(["className"], {"className": "one columns"}));}, TMP_17.$$s = self, TMP_17), $a).call($c, $hash2(["className"], {"className": "row"}));}, TMP_13.$$s = self, TMP_13), $a).call($b, $hash2(["className"], {"className": "message_input"}));
     };
 
     return (def.$spacer = function() {
@@ -1173,24 +1226,64 @@ if (tx_id == null) tx_id = nil;
     }, nil) && 'spacer';
   })(self, null);
   (function($base, $super) {
-    function $Success(){};
-    var self = $Success = $klass($base, $super, 'Success', $Success);
+    function $FileForm(){};
+    var self = $FileForm = $klass($base, $super, 'FileForm', $FileForm);
 
     var def = self.$$proto, $scope = self.$$scope, $a, $b, TMP_23;
 
     self.$include((($scope.get('React')).$$scope.get('Component')));
 
+    self.$extend($scope.get('DebugHelpers'));
+
     ($a = ($b = self).$define_state, $a.$$p = (TMP_23 = function(){var self = TMP_23.$$s || this;
 
-    return ""}, TMP_23.$$s = self, TMP_23), $a).call($b, "tx_id");
+    return false}, TMP_23.$$s = self, TMP_23), $a).call($b, "submit_disabled");
+
+    def.$hash_file = function() {
+      var self = this;
+
+      $scope.get('Hasher').$hash(document.querySelector("input[name=file]").files[0]);
+      return console.log("hash file called!!!");
+    };
 
     return (def.$render = function() {
       var $a, $b, TMP_24, self = this;
 
-      return ($a = ($b = self).$div, $a.$$p = (TMP_24 = function(){var self = TMP_24.$$s || this;
+      return ($a = ($b = self).$div, $a.$$p = (TMP_24 = function(){var self = TMP_24.$$s || this, $a, $b, TMP_25;
+
+      return ($a = ($b = self).$div, $a.$$p = (TMP_25 = function(){var self = TMP_25.$$s || this, $a, $b, TMP_26, $c, TMP_27;
+
+        ($a = ($b = self).$div, $a.$$p = (TMP_26 = function(){var self = TMP_26.$$s || this;
+
+          return self.$input($hash2(["name", "type"], {"name": "file", "type": "file"}))}, TMP_26.$$s = self, TMP_26), $a).call($b, $hash2(["className"], {"className": "five columns"}));
+          return ($a = ($c = self).$div, $a.$$p = (TMP_27 = function(){var self = TMP_27.$$s || this, $a, $b, TMP_28, $c, $d, TMP_29;
+
+          return ($a = ($b = ($c = ($d = self).$button, $c.$$p = (TMP_29 = function(){var self = TMP_29.$$s || this;
+
+            return "Write hash"}, TMP_29.$$s = self, TMP_29), $c).call($d, $hash2(["disabled"], {"disabled": self.$submit_disabled()}))).$on, $a.$$p = (TMP_28 = function(){var self = TMP_28.$$s || this;
+
+            return self.$hash_file()}, TMP_28.$$s = self, TMP_28), $a).call($b, "click")}, TMP_27.$$s = self, TMP_27), $a).call($c, $hash2(["className"], {"className": "one columns"}));}, TMP_25.$$s = self, TMP_25), $a).call($b, $hash2(["className"], {"className": "row"}))}, TMP_24.$$s = self, TMP_24), $a).call($b, $hash2(["className"], {"className": "message_input"}));
+    }, nil) && 'render';
+  })(self, null);
+  (function($base, $super) {
+    function $Success(){};
+    var self = $Success = $klass($base, $super, 'Success', $Success);
+
+    var def = self.$$proto, $scope = self.$$scope, $a, $b, TMP_30;
+
+    self.$include((($scope.get('React')).$$scope.get('Component')));
+
+    ($a = ($b = self).$define_state, $a.$$p = (TMP_30 = function(){var self = TMP_30.$$s || this;
+
+    return ""}, TMP_30.$$s = self, TMP_30), $a).call($b, "tx_id");
+
+    return (def.$render = function() {
+      var $a, $b, TMP_31, self = this;
+
+      return ($a = ($b = self).$div, $a.$$p = (TMP_31 = function(){var self = TMP_31.$$s || this;
 
       self.$p("Message written:");
-        return self.$p(self.$tx_id());}, TMP_24.$$s = self, TMP_24), $a).call($b, $hash2(["className"], {"className": "success"}));
+        return self.$p(self.$tx_id());}, TMP_31.$$s = self, TMP_31), $a).call($b, $hash2(["className"], {"className": "success"}));
     }, nil) && 'render';
   })(self, null);
   (function($base, $super) {
@@ -1202,16 +1295,16 @@ if (tx_id == null) tx_id = nil;
     self.$include((($scope.get('React')).$$scope.get('Component')));
 
     return (def.$render = function() {
-      var $a, $b, TMP_25, self = this;
+      var $a, $b, TMP_32, self = this;
 
-      return ($a = ($b = self).$div, $a.$$p = (TMP_25 = function(){var self = TMP_25.$$s || this;
+      return ($a = ($b = self).$div, $a.$$p = (TMP_32 = function(){var self = TMP_32.$$s || this;
 
-      return self.$present($scope.get('MessageForm'))}, TMP_25.$$s = self, TMP_25), $a).call($b, $hash2(["className"], {"className": "bc_stylus"}));
+      self.$present($scope.get('MessageForm'));
+        return self.$present($scope.get('FileForm'));}, TMP_32.$$s = self, TMP_32), $a).call($b, $hash2(["className"], {"className": "bc_stylus"}));
     }, nil) && 'render';
   })(self, null);
   self.$extend($scope.get('UIHelpers'));
   self.$log("loading app.rb");
   content = self.$q(".content");
-  $scope.get('React').$render($scope.get('React').$create_element($scope.get('BCStylus')), content);
-  return $scope.get('Stylus').$write("antani come se fosse");
+  return $scope.get('React').$render($scope.get('React').$create_element($scope.get('BCStylus')), content);
 })(Opal);
