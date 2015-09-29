@@ -1579,7 +1579,7 @@ if (tx_id == null) tx_id = nil;
                 return "blockcypher.com"}, TMP_32.$$s = self, TMP_32), $a).call($b, $hash2(["href"], {"href": "https://live.blockcypher.com/btc/tx/" + (self.$tx_id())}))}, TMP_31.$$s = self, TMP_31), $a).call($b);
               ($a = ($c = self).$span, $a.$$p = (TMP_33 = function(){var self = TMP_33.$$s || this;
 
-              return "-"}, TMP_33.$$s = self, TMP_33), $a).call($c);
+              return " - "}, TMP_33.$$s = self, TMP_33), $a).call($c);
               return ($a = ($d = self).$span, $a.$$p = (TMP_34 = function(){var self = TMP_34.$$s || this, $a, $b, TMP_35;
 
               return ($a = ($b = self).$a, $a.$$p = (TMP_35 = function(){var self = TMP_35.$$s || this;

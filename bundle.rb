@@ -402,7 +402,7 @@ class MessageForm
                 "blockcypher.com"
               end
             end
-            span { "-" }
+            span { " - " }
             span do
               a href: "https://blockchain.info/tx/#{self.tx_id}" do
                 "blockchain.info"
