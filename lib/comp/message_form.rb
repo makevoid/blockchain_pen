@@ -7,11 +7,13 @@ class MessageForm
   define_state(:chars)  { 0 }
   define_state(:submit_disabled)  { false }
   define_state(:tx_id)  { nil }
+  define_state(:loading) { false }
 
   MAX_CHARS = 75
 
   def write
     log "writing message: #{self.message}"
+    self.loading = true
     Pen.write self.message, self.callback_write
   end
 
@@ -47,6 +49,9 @@ class MessageForm
           end.on(:click){ write }
         end
       end
+      div className: "spinner" do
+        span { "loading..." }
+      end if self.loading
       if self.tx_id
         div className: "row" do
           div className: "spacer30"
@@ -69,6 +74,7 @@ class MessageForm
   def callback_write
     -> (tx_id) do
       self.tx_id = tx_id
+      self.loading = false
     end
   end
 
