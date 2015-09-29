@@ -1,6 +1,6 @@
-# BlockchainStylus
+# BlockchainPen
 
-BlockchainStylus it's an UI and API for writing messages to the blockchain.
+BlockchainPen it's an UI and API for writing messages to the blockchain.
 
 It is built using Ruby Opal and Bitcore.js
 
@@ -50,3 +50,5 @@ you can also run everything with a simple command (experimental)
 - opal (write js in ruby)
 - opal-browser (use websocket easily)
 - react.rb (js dom diffing + cool ruby API to define views + state models)
+
+the old name was BlockchainStylus, all the files in the repo named blockchain_stylus or bc_stylus are main files :)
