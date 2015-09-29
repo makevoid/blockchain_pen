@@ -1299,8 +1299,7 @@ if (tx_id == null) tx_id = nil;
 
       return ($a = ($b = self).$div, $a.$$p = (TMP_32 = function(){var self = TMP_32.$$s || this;
 
-      self.$present($scope.get('MessageForm'));
-        return self.$present($scope.get('FileForm'));}, TMP_32.$$s = self, TMP_32), $a).call($b, $hash2(["className"], {"className": "bc_stylus"}));
+      return self.$present($scope.get('MessageForm'))}, TMP_32.$$s = self, TMP_32), $a).call($b, $hash2(["className"], {"className": "bc_stylus"}));
     }, nil) && 'render';
   })(self, null);
   self.$extend($scope.get('UIHelpers'));

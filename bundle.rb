@@ -424,7 +424,7 @@ class BCStylus
   def render
     div className: "bc_stylus" do
       present MessageForm
-      present FileForm
+      # present FileForm # alpha
     end
   end
 end
