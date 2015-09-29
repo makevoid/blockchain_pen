@@ -107,7 +107,7 @@ class Blockchain
   def self.pushtx_callback(callback)
     -> (tx_info) do
       `console.log("TX INFO", tx_info)`
-      `callback(tx_info.hash)`
+      `callback(tx_info.tx.hash)`
     end
   end
 

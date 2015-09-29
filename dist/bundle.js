@@ -917,7 +917,7 @@ if (utxo == null) utxo = nil;
       return ($a = ($b = self).$lambda, $a.$$p = (TMP_3 = function(tx_info){var self = TMP_3.$$s || this;
 if (tx_info == null) tx_info = nil;
       console.log("TX INFO", tx_info);
-        return callback(tx_info.hash);}, TMP_3.$$s = self, TMP_3), $a).call($b);
+        return callback(tx_info.tx.hash);}, TMP_3.$$s = self, TMP_3), $a).call($b);
     }), nil) && 'pushtx_callback';
   })(self, null);
   (function($base, $super) {
