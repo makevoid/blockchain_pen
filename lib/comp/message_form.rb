@@ -74,6 +74,12 @@ class MessageForm
                 "chain.so"
               end
             end
+            span { " - " }
+            span do
+              a href: "http://eternitywall.it/m/#{self.tx_id}" do
+                "eternitywall.it"
+              end
+            end
           end
         end
       end
