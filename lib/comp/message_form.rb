@@ -68,6 +68,12 @@ class MessageForm
                 "blockchain.info"
               end
             end
+            span { " - " }
+            span do
+              a href: "https://chain.so/tx/BTC/#{self.tx_id}" do
+                "chain.so"
+              end
+            end
           end
         end
       end
