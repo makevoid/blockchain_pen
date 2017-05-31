@@ -4,7 +4,10 @@ require 'json'
 class BitCore
   include DebugHelpers
 
-  TX_FEE = 8000
+  # TX_FEE = 8000   # old fee (~10k sat)
+  # TX_FEE = 29_000 # min fee (2017)
+  TX_FEE = 34_000 # good fee
+  # TX_FEE = 40_000 # big fee (quick confirm)
 
   def initialize(pvt_key_string)
     @pvt_key_string = pvt_key_string

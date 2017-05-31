@@ -1,5 +1,6 @@
 source "http://rubygems.org"
 
+gem "rake"
 gem "roda"
 gem "oj"
 gem "opal", "~> 0.7.2"
